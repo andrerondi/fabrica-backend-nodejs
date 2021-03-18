@@ -1,10 +1,12 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 
-app.get('/', function (req, res) {
-    res.send('hello World')
-})
+const port = 3000;
 
-app.listen(3000, function() {
-    console.info('App rodando em http://localhost:3000')
-})
+app.get('/hello', (req, res) => {
+    res.send('hello World');
+});
+
+app.listen(port, () => {
+    console.info(`App rodando em http://localhost:${port}`);
+});
