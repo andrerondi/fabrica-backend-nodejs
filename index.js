@@ -16,7 +16,7 @@ const mensagens = [
 ];
 
 app.get('/mensagens', (req, res) => {
-    res.send('LER TODAS AS MENSAGENS.');
+    res.send(mensagens.filter(Boolean));
 });
 
 app.get('/mensagens/:id', (req, res) => {
@@ -36,6 +36,12 @@ app.put('/mensagens/:id', (req, res) => {
     const mensagem = req.body.mensagem;
     mensagens[id] = mensagem;
     res.send(`Mensagem atualizada com sucesso: '${mensagem}'`);
+});
+
+app.delete('/mensagens/:id', (req, res) => {
+    const id = req.params.id -1;
+    delete mensagens[id];
+    res.send('Mensagem removida com sucesso.');
 });
 /*
 Lista de endpoints da aplicação CRUD de mensagens
