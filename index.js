@@ -11,8 +11,14 @@ app.get('/hello', (req, res) => {
 });
 
 const mensagens = [
-    "Essa é a primeira mensagem",
-    "Essa é a segunda mensagem"
+    {
+        "id": 1,
+        "texto": "Essa é a primeira mensagem"
+    },
+    {
+        "id": 2,
+        "texto": "Essa é a segunda mensagem"
+    }
 ];
 
 app.get('/mensagens', (req, res) => {
@@ -22,20 +28,34 @@ app.get('/mensagens', (req, res) => {
 app.get('/mensagens/:id', (req, res) => {
     const id = req.params.id - 1;
     const mensagem = mensagens[id];
+    if (!mensagem) {
+        res.send('Mensagem não encontrada.');
+        return;
+    }
     res.send(mensagem);
 });
 
 app.post('/mensagens', (req, res) => {
     const mensagem = req.body;
+    if (!mensagem || !mensagem.texto) {
+        res.send('Mensagem inválida.');
+        return;
+    }
+    mensagem.id = mensagens.length + 1;
     mensagens.push(mensagem);
-    res.send(`Mensagem criada com sucesso: '${mensagem}'`);
+    res.send(mensagem);
 });
 
 app.put('/mensagens/:id', (req, res) => {
     const id = req.params.id -1;
-    const mensagem = req.body.mensagem;
-    mensagens[id] = mensagem;
-    res.send(`Mensagem atualizada com sucesso: '${mensagem}'`);
+    const mensagem = mensagens[id];
+    const novoTexto = req.body.texto;
+    if (!novoTexto) {
+        res.send('Mensagem inválida.');
+        return;
+    }
+    mensagem.texto = novoTexto;
+    res.send(mensagem);
 });
 
 app.delete('/mensagens/:id', (req, res) => {
