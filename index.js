@@ -21,13 +21,17 @@ const mensagens = [
     }
 ];
 
+const getMensagensValidas = () => mensagens.filter(boolean);
+
+const getMensagemById = id => getMensagensValidas().find(msg => msg.id === id);
+
 app.get('/mensagens', (req, res) => {
-    res.send(mensagens.filter(Boolean));
+    res.send(getMensagensValidas());
 });
 
 app.get('/mensagens/:id', (req, res) => {
-    const id = req.params.id - 1;
-    const mensagem = mensagens[id];
+    const id = +req.params.id;
+    const mensagem = getMensagemById(id);
     if (!mensagem) {
         res.send('Mensagem não encontrada.');
         return;
@@ -47,8 +51,8 @@ app.post('/mensagens', (req, res) => {
 });
 
 app.put('/mensagens/:id', (req, res) => {
-    const id = req.params.id -1;
-    const mensagem = mensagens[id];
+    const id = +req.params.id;
+    const mensagem = getMensagemById(id);
     const novoTexto = req.body.texto;
     if (!novoTexto) {
         res.send('Mensagem inválida.');
@@ -59,8 +63,14 @@ app.put('/mensagens/:id', (req, res) => {
 });
 
 app.delete('/mensagens/:id', (req, res) => {
-    const id = req.params.id -1;
-    delete mensagens[id];
+    const id = +req.params.id;
+    const mensagem = getMensagemById(id);
+    if (!mensagem) {
+        res.send('Mensagem não encontrada');
+        return;
+    }
+    const index = mensagem.indexOf(mensagem);
+    delete mensagens[index];
     res.send('Mensagem removida com sucesso.');
 });
 /*
